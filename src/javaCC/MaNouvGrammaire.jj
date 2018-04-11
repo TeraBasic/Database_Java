@@ -1,0 +1,108 @@
+/**
+ * JavaCC template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */
+options
+{
+  static = true;
+}
+PARSER_BEGIN(SQLParser)
+
+package javaCC;
+import jus.aoo.sgbdComportements._Relation;
+import jus.aoo.sgbdComportements.Identity;
+import jus.aoo.sgbdComportements.Predicat;
+import jus.aoo.sgbdComportements.Projection;
+import jus.aoo.sgbdComportements.Selection;
+import jus.aoo.sgbdComportements.StateFullMemoryRelation;
+import jus.aoo.sgbdComportements.StateFullRelation;
+import jus.aoo.sgbdComposants.Attribut;
+import jus.aoo.sgbdComposants.Tuple;
+import jus.aoo.sgbdComposants._Schema;
+import jus.aoo.sgbdComposants._Tuple;
+import jus.aoo.sgbdTypes.BOOLEAN;
+import jus.aoo.sgbdTypes.CHARACTER;
+import jus.aoo.sgbdTypes.DATE;
+import jus.aoo.sgbdTypes.FLOAT;
+import jus.aoo.sgbdTypes.INTEGER;
+import jus.aoo.sgbdTypes.STRING;
+import jus.aoo.sgbdTypes.TYPE;
+import jus.aoo.sgbdComposants.Schema;import java.util.List;import jus.aoo.sgbdTypes.VOID;
+import jus.aoo.sgbdComposants.Schema;
+
+import java.util.ArrayList;
+import java.util.List;
+public class SQLParser{  public static void main(String args []) throws ParseException  {    SQLParser parser = new SQLParser(System.in);
+    //SimpleNode node = parser.CreateViewStatement();
+    //node.dump(" ");
+    _Relation r;
+    // = new Relation();
+     _Schema sc = (_Schema) new Schema(
+			new Attribut("C0", (TYPE) INTEGER.type, true),
+			new Attribut("C1", (TYPE) STRING.type, false), 
+			new Attribut("C2", (TYPE) STRING.type, false),
+			new Attribut("C3", (TYPE) BOOLEAN.type, false),
+			new Attribut("C4", (TYPE) DATE.type, false),
+			new Attribut("C5", (TYPE) FLOAT.type, false),
+			new Attribut("C6", (TYPE) CHARACTER.type, false));
+	
+	StateFullRelation r1 = new StateFullMemoryRelation("RELATION", sc);
+	
+	r1.add(new Tuple(1, "MORAT", "PHILIPPE",false,"01/01/1995",17.5,'A'));
+	r1.add(new Tuple(2, "CUEDARI", "IMELDA",true,"02/02/1995",10.5,'B'));
+	r1.add(new Tuple(3, "BRUNET", "ROMAIN",false,"03/03/1995",11.5,'C'));
+	r1.add(new Tuple(4, "AIDARA", "SIDI MOHAMED",false,"04/04/1995",12.5,'D'));
+	r1.add(new Tuple(5, "LAKHYARI", "MOHAMMED SAID",false,"05/05/1995",13.5,'E'));
+	r1.add(new Tuple(6, "YI", "LI",false,"06/06/1995",14.5,'F'));
+	System.out.println("Card:"+r1.cardinalite());
+	    while (true)    {      System.out.println("Reading from standard input...");      System.out.print("Enter an expression SQL SELECT;:");      try      {        /*switch (SQLParser.SelectStatment())        {          case 0:           System.out.println("OK.");          break;          //case 1 :           //System.out.println("Goodbye.");          //break;          default :           break;        }*/
+		r = SQLParser.SelectStatment();
+		 for (_Tuple t : r) {
+        			for (Object o : t) {
+        				System.out.print(o + " ");
+        			}
+        			System.out.println();
+        		}
+		System.out.println("OK.");      }      catch (Exception e)      {        System.out.println("NOK.");        System.out.println(e.getMessage());        SQLParser.ReInit(System.in);      }      catch (Error e)      {        System.out.println("Oops.");        System.out.println(e.getMessage());        break;      }    }  }}PARSER_END(SQLParser)SKIP :{  " "| "\r"| "\t"| "\n"}TOKEN : /* OPERATORS */{  < PLUS : "+" >| < MINUS : "-" >| < MULTIPLY : "*" >| < DIVIDE : "/" >
+| < SEMICOLON: ";" >}
+TOKEN:
+{
+  <CREATE: "create">
+| <VIEW: "view">
+| <AS: "as">
+| <SELECT: "select">
+| <FROM: "from">
+| <WITH: "with">
+| <CASCADED: "cascaded">
+| <LOCAL: "local">
+| <CHECK: "check">
+| <OPTION: "option">
+}TOKEN :
+{
+  < Id: ["a"-"z","A"-"Z"] ( ["a"-"z","A"-"Z","0"-"9"] )* >
+}
+TOKEN :{  < CONSTANT : (< DIGIT >)+ >| < #DIGIT : [ "0"-"9" ] >}
+
+int one_line() :{}{  sum() ";"  {    return 0;  }| ";"  {    return 1;  }}void sum() :{}{  term()  (    (      < PLUS >    | < MINUS >    )    term()  )*}void term() :{}{  unary()  (    (      < MULTIPLY >    | < DIVIDE >    )    unary()  )*}void unary() :{}{  < MINUS > element()| element()}void element() :{}{  < CONSTANT >| "(" sum() ")"}
+/*
+create view :CREATE VIEW V1 AS SELECT COL1 FROM T1 WITH CASCADED/LOCAL CHECK OPTION;
+*/
+int CreateViewStatement() :
+{}
+{
+  <CREATE> <VIEW> <Id> <AS> SelectStatment()
+  [ <WITH> [ ( <CASCADED> | <LOCAL> ) ] <CHECK> <OPTION> ]
+  <SEMICOLON>
+  <EOF>
+  { return 0;}
+}
+
+_Relation SelectStatment() :{Token t; List<Attribut > l;}{
+  <SELECT> l=SCHEMA() <FROM> t=<Id> <SEMICOLON> { return projetction.createProjection(t.image,l);}
+  
+}
+
+List<Attribut > SCHEMA():{Token t; List<Attribut > l = new ArrayList<Attribut >();}{
+  "*" {return l; }
+| t=< Id > {l.add(new Attribut(t.image,VOID.type,true));} ("," < Id >{l.add(new Attribut(t.image,VOID.type,false)); })* {return l; }
+}
+
