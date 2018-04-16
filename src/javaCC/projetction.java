@@ -7,6 +7,7 @@ import jus.aoo.sgbdComportements.StateFullMemoryRelation;
 import jus.aoo.sgbdComportements.StateFullRelation;
 import jus.aoo.sgbdComportements._Relation;
 import jus.aoo.sgbdComposants.Attribut;
+import jus.aoo.sgbdComposants.Relation;
 import jus.aoo.sgbdComposants.Schema;
 import jus.aoo.sgbdComposants._Schema;
 

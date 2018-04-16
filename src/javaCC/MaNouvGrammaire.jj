@@ -45,7 +45,7 @@ public class SQLParser{  public static void main(String args []) throws ParseE
 			new Attribut("C5", (TYPE) FLOAT.type, false),
 			new Attribut("C6", (TYPE) CHARACTER.type, false));
 	
-	StateFullRelation r1 = new StateFullMemoryRelation("RELATION", sc);
+	StateFullRelation r5 = new StateFullMemoryRelation("RELATION", sc);
 	
 	r1.add(new Tuple(1, "MORAT", "PHILIPPE",false,"01/01/1995",17.5,'A'));
 	r1.add(new Tuple(2, "CUEDARI", "IMELDA",true,"02/02/1995",10.5,'B'));
@@ -96,7 +96,7 @@ int CreateViewStatement() :
   { return 0;}
 }
 
-_Relation SelectStatment() :{Token t; List<Attribut > l;}{
+_Relation SelectStatment() :{Token t; List<Attribut> l;}{
   <SELECT> l=SCHEMA() <FROM> t=<Id> <SEMICOLON> { return projetction.createProjection(t.image,l);}
   
 }

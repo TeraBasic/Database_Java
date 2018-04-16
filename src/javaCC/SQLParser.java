@@ -59,15 +59,13 @@ public class SQLParser implements SQLParserConstants {
       System.out.print("Enter an expression SQL SELECT;:");
       try
       {
-        /*switch (SQLParser.SelectStatment())        {          case 0:           System.out.println("OK.");          break;          //case 1 :           //System.out.println("Goodbye.");          //break;          default : select C1,C2 from r1;          break;        }*/
+        /*switch (SQLParser.SelectStatment())        {          case 0:           System.out.println("OK.");          break;          //case 1 :           //System.out.println("Goodbye.");          //break;          default :           break;select C1,C2 from r1;        }*/
                 r = SQLParser.SelectStatment();
-                System.out.println("jer sui 1 "+r.cardinalite());
                  for (_Tuple t : r) {
-                	 System.out.println("jer sui 2");
                                 for (Object o : t) {
-                                        System.out.println(o + " dqg");
+                                        System.out.print(o + " ");
                                 }
-                                System.out.println("jer sui ");
+                                System.out.println("je suis yi");
                         }
                 System.out.println("OK.");
       }
@@ -79,7 +77,7 @@ public class SQLParser implements SQLParserConstants {
       }
       catch (Error e)
       {
-        System.out.println("Oops.");
+    	  System.out.println("Oops.");
         System.out.println(e.getMessage());
         break;
       }
@@ -245,7 +243,7 @@ create view :CREATE VIEW V1 AS SELECT COL1 FROM T1 WITH CASCADED/LOCAL CHECK OPT
   }
 
   static final public _Relation SelectStatment() throws ParseException {
-                             Token t; List<Attribut > l;
+                             Token t; List<Attribut> l;
     jj_consume_token(SELECT);
     l = SCHEMA();
     jj_consume_token(FROM);
